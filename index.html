@@ -69,23 +69,6 @@
         </div>
     </div>
     
-    <!-- Product Image Update Modal -->
-    <div class="modal-overlay hidden" id="image-update-modal">
-        <div class="modal-content">
-            <h3>Update Product Image</h3>
-            <form id="image-update-form">
-                <div class="form-group">
-                    <label for="update-image-filename">New Image Filename</label>
-                    <input type="text" id="update-image-filename" placeholder="e.g., new-image.jpg" required>
-                </div>
-                <div class="form-actions">
-                    <button type="submit" class="btn-primary">Update Image</button>
-                    <button type="button" class="btn-secondary" onclick="closeImageUpdateModal()">Cancel</button>
-                </div>
-            </form>
-        </div>
-    </div>
-    
     <!-- Floating Appointment Button -->
     <button class="floating-appointment-btn" onclick="showPage('appointment')" title="Book Appointment with Herbal Specialist">📅</button>
     
@@ -133,6 +116,11 @@
     </div>
     
     <header class="header" id="main-header">
+        <!-- Special August 14 Banner -->
+        <div class="august-14-banner">
+            🇵🇰 Happy 14th August Independence Day Pakistan!  🇵🇰  Azadi Sale Flat  14%off!
+        </div>
+        
         <div class="header-tools">
             <button class="mobile-menu-btn" onclick="openMobileMenu()">☰</button>
             <div class="logo">
@@ -637,6 +625,7 @@
                         <div class="admin-tab active" onclick="showAdminContent('orders')">Orders</div>
                         <div class="admin-tab" onclick="showAdminContent('appointments')">Appointments</div>
                         <div class="admin-tab" onclick="showAdminContent('products')">Add Product</div>
+                        <div class="admin-tab" onclick="showAdminContent('csv-import')">Import Products CSV</div>
                         <div class="admin-tab" onclick="showAdminContent('manage')">Manage Products</div>
                     </div>
                     <div class="admin-content" id="admin-orders-content">
@@ -684,6 +673,36 @@
                             </div>
                             <button class="btn btn-primary" style="margin-top: 20px; width: auto;" type="submit">Add Product</button>
                         </form>
+                    </div>
+                    <div class="admin-content hidden" id="admin-csv-import-content">
+                        <h3 style="margin-bottom: 20px;">Import Products from CSV</h3>
+                        <div class="csv-import-section">
+                            <div class="csv-instructions">
+                                <h4>CSV Format Instructions:</h4>
+                                <p>Your CSV file should have the following columns (in this exact order):</p>
+                                <ol>
+                                    <li><strong>name</strong> - Product name</li>
+                                    <li><strong>price</strong> - Price in PKR (numbers only)</li>
+                                    <li><strong>category</strong> - One of: dry-fruits, herbal-tea, honey, seeds, supplements, capsules, cold-pressed-oil, essential-oils, deals</li>
+                                    <li><strong>description</strong> - Product description</li>
+                                    <li><strong>image</strong> - Image filename (e.g., product1.jpg)</li>
+                                </ol>
+                                <p><strong>Example CSV format:</strong></p>
+                                <pre>name,price,category,description,image
+Almonds Premium,450,dry-fruits,High quality California almonds,almonds.jpg
+Green Tea Organic,250,herbal-tea,Pure organic green tea leaves,green-tea.jpg</pre>
+                                <p class="csv-note"><strong>Note:</strong> Make sure your image files are already uploaded to the images folder.</p>
+                            </div>
+                            <form id="csv-import-form">
+                                <div class="form-group">
+                                    <label for="csv-file">Select CSV File:</label>
+                                    <input type="file" id="csv-file" accept=".csv" required style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px;">
+                                </div>
+                                <button type="submit" class="btn btn-primary" style="margin-top: 15px; width: auto;">Import Products</button>
+                            </form>
+                            <div id="csv-import-status" class="csv-status hidden"></div>
+                            <div id="csv-preview" class="csv-preview hidden"></div>
+                        </div>
                     </div>
                     <div class="admin-content hidden" id="admin-manage-content">
                         <h3 style="margin-bottom: 20px;">Manage Products</h3>
