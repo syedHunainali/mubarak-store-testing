@@ -54,18 +54,30 @@
     <title>Mubarak-pansar - Pakistan Leading Herbal Online Store</title>
     
     <!-- Preload critical resources -->
-    <link rel="preload" href="css/styles.css" as="style">
-    <link rel="preload" href="https://mubarakpansar.store/images/logo.png" as="image">
+    <link rel="preload" href="styles.css" as="style">
+    <link rel="preload" href="images/logo.png" as="image">
     
     <!-- CSS -->
     <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
+    <!-- Custom Alert Modal -->
     <div class="modal-overlay hidden" id="custom-modal">
         <div class="modal-content">
             <p id="modal-message">This is a message.</p>
             <button class="btn btn-primary modal-close-btn" id="modal-close-btn">Close</button>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div class="modal-overlay hidden" id="confirm-modal">
+        <div class="modal-content">
+            <p id="confirm-message">Are you sure?</p>
+            <div class="confirm-buttons">
+                <button class="btn btn-primary" id="confirm-yes-btn">Yes</button>
+                <button class="btn btn-secondary" id="confirm-no-btn">No</button>
+            </div>
         </div>
     </div>
     
@@ -116,11 +128,13 @@
     </div>
     
     <header class="header" id="main-header">
-        <!-- Special August 14 Banner -->
+        <!-- Special August 14 Banner with image background -->
         <div class="august-14-banner">
-            🇵🇰 Happy 14th August Independence Day Pakistan!  🇵🇰  Azadi Sale Flat  14%off!
+            <img src="images/14-aug-banner.svg"  class="august-14-banner-image" alt="14th August Banner">
+            <div class="august-14-banner-text">
+                 <!-- Text can be added here if needed -->
+            </div>
         </div>
-        
         <div class="header-tools">
             <button class="mobile-menu-btn" onclick="openMobileMenu()">☰</button>
             <div class="logo">
@@ -174,24 +188,18 @@
                 <div class="slide">
                     <img alt="Herbal Remedies Banner" src="images/Banner1.png" />
                     <div class="slide-content">
-                        <!-- <h1>Discover Nature's Finest Remedies</h1> -->
-                        <!-- <p>Your trusted source for natural health and wellness products.</p> -->
                         <a class="btn" href="#" onclick="showPage('supplements')">Shop Now</a>
                     </div>
                 </div>
                 <div class="slide">
                     <img alt="Premium Honey Banner" src="images/Banner2.png" />
                     <div class="slide-content">
-                        <!-- <h1>Premium Quality Honey</h1> -->
-                        <!-- <p>100% Pure and Organic Honey varieties.</p> -->
                         <a class="btn btn-secondary" href="#" onclick="showPage('honey')">Order now</a>
                     </div>
                 </div>
                 <div class="slide">
                     <img alt="Fresh Dry Fruits Banner" src="images/Banner3.png" />
                     <div class="slide-content">
-                        <!-- <h1>Fresh & Healthy Dry Fruits</h1> -->
-                        <!-- <p>The perfect snack for a healthy lifestyle.</p> -->
                         <a class="btn" href="#" onclick="showPage('appointment')">Book Your Appointment Now</a>
                     </div>
                 </div>
@@ -209,21 +217,18 @@
                 <div class="slide" style="display: block;">
                     <img alt="Herbal Remedies Mobile Banner" src="images/MBanner1.png" />
                     <div class="slide-content">
-                        <!-- <h1>Nature's Finest Remedies</h1> -->
                         <a class="btn" href="#" onclick="showPage('supplements')">Shop Now</a>
                     </div>
                 </div>
                 <div class="slide">
                     <img alt="Premium Honey Mobile Banner" src="images/MBanner2.png" />
                     <div class="slide-content">
-                        <!-- <h1>Premium Quality Honey</h1> -->
                         <a class="btn" href="#" onclick="showPage('honey')">Order now</a>
                     </div>
                 </div>
                 <div class="slide">
                     <img alt="Dry Fruits Mobile Banner" src="images/MBanner3.png" />
                     <div class="slide-content">
-                        <!-- <h1>Healthy Dry Fruits</h1> -->
                         <a class="btn" href="#" onclick="showPage('appointment')">Book Your Appointment Now</a>
                     </div>
                 </div>
@@ -625,7 +630,6 @@
                         <div class="admin-tab active" onclick="showAdminContent('orders')">Orders</div>
                         <div class="admin-tab" onclick="showAdminContent('appointments')">Appointments</div>
                         <div class="admin-tab" onclick="showAdminContent('products')">Add Product</div>
-                        <div class="admin-tab" onclick="showAdminContent('csv-import')">Import Products CSV</div>
                         <div class="admin-tab" onclick="showAdminContent('manage')">Manage Products</div>
                     </div>
                     <div class="admin-content" id="admin-orders-content">
@@ -674,36 +678,6 @@
                             <button class="btn btn-primary" style="margin-top: 20px; width: auto;" type="submit">Add Product</button>
                         </form>
                     </div>
-                    <div class="admin-content hidden" id="admin-csv-import-content">
-                        <h3 style="margin-bottom: 20px;">Import Products from CSV</h3>
-                        <div class="csv-import-section">
-                            <div class="csv-instructions">
-                                <h4>CSV Format Instructions:</h4>
-                                <p>Your CSV file should have the following columns (in this exact order):</p>
-                                <ol>
-                                    <li><strong>name</strong> - Product name</li>
-                                    <li><strong>price</strong> - Price in PKR (numbers only)</li>
-                                    <li><strong>category</strong> - One of: dry-fruits, herbal-tea, honey, seeds, supplements, capsules, cold-pressed-oil, essential-oils, deals</li>
-                                    <li><strong>description</strong> - Product description</li>
-                                    <li><strong>image</strong> - Image filename (e.g., product1.jpg)</li>
-                                </ol>
-                                <p><strong>Example CSV format:</strong></p>
-                                <pre>name,price,category,description,image
-Almonds Premium,450,dry-fruits,High quality California almonds,almonds.jpg
-Green Tea Organic,250,herbal-tea,Pure organic green tea leaves,green-tea.jpg</pre>
-                                <p class="csv-note"><strong>Note:</strong> Make sure your image files are already uploaded to the images folder.</p>
-                            </div>
-                            <form id="csv-import-form">
-                                <div class="form-group">
-                                    <label for="csv-file">Select CSV File:</label>
-                                    <input type="file" id="csv-file" accept=".csv" required style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px;">
-                                </div>
-                                <button type="submit" class="btn btn-primary" style="margin-top: 15px; width: auto;">Import Products</button>
-                            </form>
-                            <div id="csv-import-status" class="csv-status hidden"></div>
-                            <div id="csv-preview" class="csv-preview hidden"></div>
-                        </div>
-                    </div>
                     <div class="admin-content hidden" id="admin-manage-content">
                         <h3 style="margin-bottom: 20px;">Manage Products</h3>
                         <div id="admin-products-list"></div>
@@ -712,6 +686,50 @@ Green Tea Organic,250,herbal-tea,Pure organic green tea leaves,green-tea.jpg</pr
             </div>
         </div>
     </main>
+
+    <!-- Edit Product Modal -->
+    <div class="modal-overlay hidden" id="edit-product-modal">
+        <div class="modal-content">
+            <form id="edit-product-form">
+                <h3>Edit Product</h3>
+                <input type="hidden" id="edit-product-id">
+                <div class="form-group">
+                    <label for="edit-product-name">Product Name</label>
+                    <input id="edit-product-name" type="text" required>
+                </div>
+                <div class="form-group">
+                    <label for="edit-product-price">Original Price (PKR)</label>
+                    <input id="edit-product-price" type="number" required>
+                </div>
+                <div class="form-group">
+                    <label for="edit-product-category">Category</label>
+                    <select id="edit-product-category" required>
+                         <option value="dry-fruits">Dry Fruits</option>
+                         <option value="herbal-tea">Herbal Tea</option>
+                         <option value="honey">Honey</option>
+                         <option value="seeds">Seeds</option>
+                         <option value="supplements">Supplements</option>
+                         <option value="capsules">Capsules</option>
+                         <option value="cold-pressed-oil">Cold Pressed Oil</option>
+                         <option value="essential-oils">Essential Oils</option>
+                         <option value="deals">Deals</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="edit-product-image-filename">Product Image Filename</label>
+                    <input id="edit-product-image-filename" placeholder="e.g., my-image.jpg" type="text" required>
+                </div>
+                <div class="form-group">
+                    <label for="edit-product-description">Description</label>
+                    <textarea id="edit-product-description" rows="4" required></textarea>
+                </div>
+                <div class="form-buttons">
+                    <button type="submit" class="btn-primary">Save Changes</button>
+                    <button type="button" class="btn btn-secondary" id="edit-modal-close-btn">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
     
     <footer class="footer">
         <div class="container">

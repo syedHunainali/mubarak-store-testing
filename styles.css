@@ -22,24 +22,6 @@ body {
     display: none !important;
 }
 
-/* August 14 Independence Day Banner */
-.august-14-banner {
-    background: linear-gradient(45deg, #01a651, #ffffff, #01a651);
-    color: #000;
-    text-align: center;
-    padding: 12px;
-    font-size: 16px;
-    font-weight: bold;
-    animation: pulse 2s infinite;
-    border-bottom: 2px solid #01a651;
-}
-
-@keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.02); }
-    100% { transform: scale(1); }
-}
-
 /* Button Styles */
 .btn {
     background: #000000;
@@ -51,9 +33,8 @@ body {
     transition: all 0.3s;
     border: 2px solid #ffffff;
     cursor: pointer;
-    /* Positioning for bottom center */
     position: absolute;
-    bottom: 70px;     /* distance from bottom of banner */
+    bottom: 70px;
     left: 50%;
     transform: translateX(-50%);
 }
@@ -96,7 +77,19 @@ body {
     color: white;
 }
 
-/* Delete Button */
+.btn-edit {
+    background: #3498db;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    border: none;
+}
+
+.btn-edit:hover {
+    background: #2980b9;
+}
+
 .btn-delete {
     background: #e74c3c;
     color: white;
@@ -104,14 +97,12 @@ body {
     border-radius: 5px;
     cursor: pointer;
     border: none;
-    margin-left: 10px;
 }
 
 .btn-delete:hover {
     background: #c0392b;
 }
 
-/* Fulfillment Button Style */
 .btn-fulfillment {
     background: #3498db;
     color: white;
@@ -554,7 +545,6 @@ body {
     width: 100%;
     height: 500px;
     position: relative;
-    background-size: cover;
     background-position: center;
 }
 
@@ -922,41 +912,26 @@ body {
     display: flex;
     border-bottom: 1px solid #ccc;
     margin-bottom: 20px;
-    flex-wrap: wrap;
-    gap: 5px;
 }
 
 .admin-tab {
-    padding: 12px 20px;
+    padding: 10px 20px;
     cursor: pointer;
     background: #f1f1f1;
-    border: 1px solid #ddd;
-    border-bottom: 1px solid #ccc;
-    border-radius: 5px 5px 0 0;
-    font-size: 14px;
-    font-weight: 500;
-    transition: all 0.3s ease;
-    margin-bottom: -1px;
-}
-
-.admin-tab:hover {
-    background: #e9e9e9;
 }
 
 .admin-tab.active {
     background: #fff;
-    border-bottom: 1px solid #fff;
+    border: 1px solid #ccc;
+    border-bottom: none;
     font-weight: bold;
-    color: #7BC142;
 }
 
 .admin-content {
     background: #fff;
-    padding: 25px;
+    padding: 20px;
     border: 1px solid #ccc;
     border-top: none;
-    border-radius: 0 0 8px 8px;
-    min-height: 400px;
 }
 
 .order-record,
@@ -995,132 +970,6 @@ body {
     margin-bottom: 0;
 }
 
-.admin-product-form #image-preview {
-    max-width: 100px;
-    max-height: 100px;
-    margin-top: 10px;
-    border: 1px solid #ccc;
-    padding: 5px;
-    border-radius: 5px;
-}
-
-/* CSV Import Styles */
-.csv-import-section {
-    max-width: 800px;
-}
-
-.csv-instructions {
-    background: #f8f9fa;
-    padding: 20px;
-    border-radius: 8px;
-    margin-bottom: 30px;
-    border-left: 4px solid #7BC142;
-}
-
-.csv-instructions h4 {
-    color: #7BC142;
-    margin-bottom: 15px;
-}
-
-.csv-instructions p {
-    margin-bottom: 10px;
-    color: #666;
-}
-
-.csv-instructions ol {
-    margin: 15px 0;
-    padding-left: 20px;
-}
-
-.csv-instructions ol li {
-    margin-bottom: 8px;
-    color: #555;
-}
-
-.csv-instructions pre {
-    background: #f1f3f4;
-    padding: 15px;
-    border-radius: 5px;
-    font-family: 'Courier New', monospace;
-    font-size: 13px;
-    color: #333;
-    overflow-x: auto;
-    margin: 10px 0;
-    border: 1px solid #ddd;
-}
-
-.csv-note {
-    background: #fff3cd;
-    color: #856404;
-    padding: 10px;
-    border-radius: 5px;
-    margin-top: 15px;
-    border: 1px solid #ffeaa7;
-}
-
-.csv-status {
-    margin-top: 20px;
-    padding: 15px;
-    border-radius: 8px;
-    font-weight: bold;
-}
-
-.csv-status.success {
-    background: #d4edda;
-    color: #155724;
-    border: 1px solid #c3e6cb;
-}
-
-.csv-status.error {
-    background: #f8d7da;
-    color: #721c24;
-    border: 1px solid #f5c6cb;
-}
-
-.csv-status.info {
-    background: #d1ecf1;
-    color: #0c5460;
-    border: 1px solid #bee5eb;
-}
-
-.csv-preview {
-    margin-top: 20px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    overflow: hidden;
-}
-
-.csv-preview h4 {
-    background: #f8f9fa;
-    padding: 10px 15px;
-    margin: 0;
-    color: #333;
-    border-bottom: 1px solid #ddd;
-}
-
-.csv-preview-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.csv-preview-table th,
-.csv-preview-table td {
-    padding: 8px 12px;
-    text-align: left;
-    border-bottom: 1px solid #eee;
-    font-size: 14px;
-}
-
-.csv-preview-table th {
-    background: #f8f9fa;
-    font-weight: bold;
-    color: #333;
-}
-
-.csv-preview-table tr:hover {
-    background: #f5f5f5;
-}
-
 /* Product Management in Admin */
 .admin-product-item {
     display: flex;
@@ -1135,6 +984,16 @@ body {
 
 .admin-product-info {
     flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.admin-product-thumbnail {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 5px;
 }
 
 .admin-product-info h4 {
@@ -1153,7 +1012,7 @@ body {
     gap: 10px;
 }
 
-/* Custom Modal */
+/* Custom Modals (Alert, Confirm, Edit) */
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -1165,6 +1024,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    padding: 20px;
 }
 
 .modal-content {
@@ -1186,6 +1046,28 @@ body {
     background: #7BC142;
     color: white;
     padding: 10px 25px;
+}
+
+.confirm-buttons, .form-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.confirm-buttons .btn, .form-buttons .btn {
+    width: auto;
+    min-width: 100px;
+}
+
+#edit-product-form {
+    text-align: left;
+}
+
+#edit-product-form h3 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
 }
 
 /* Product Grid & Cards */
@@ -1227,6 +1109,18 @@ body {
     object-fit: cover;
 }
 
+.discount-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: #e74c3c;
+    color: white;
+    padding: 5px 8px;
+    border-radius: 5px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
 .product-info {
     padding: 15px;
     flex-grow: 1;
@@ -1247,15 +1141,20 @@ body {
 .product-price {
     font-size: 18px;
     font-weight: bold;
-    color: #f39c12;
     margin-bottom: 12px;
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+}
+
+.price-sale {
+    color: #f39c12;
 }
 
 .price-original {
     font-size: 14px;
     color: #999;
     text-decoration: line-through;
-    margin-right: 8px;
 }
 
 .quantity-controls {
@@ -1592,11 +1491,6 @@ body {
         right: 0;
     }
 
-    .august-14-banner {
-        font-size: 14px;
-        padding: 8px;
-    }
-
     .header-tools {
         padding: 10px 15px;
         flex-wrap: nowrap;
@@ -1656,7 +1550,7 @@ body {
 
     /* Mobile Content */
     body {
-        padding-top: 155px; /* Adjusted for August 14 banner */
+        padding-top: 115px;
     }
 
     .page-content {
@@ -1824,9 +1718,8 @@ body {
 
     .admin-tab {
         flex: 1;
-        font-size: 12px;
-        padding: 8px 12px;
-        min-width: 120px;
+        font-size: 14px;
+        padding: 8px 15px;
     }
 
     .admin-product-item {
@@ -1838,24 +1731,6 @@ body {
     .admin-product-actions {
         width: 100%;
         justify-content: flex-end;
-    }
-
-    /* Mobile CSV Import */
-    .csv-instructions {
-        padding: 15px;
-    }
-
-    .csv-instructions ol {
-        padding-left: 15px;
-    }
-
-    .csv-preview-table {
-        font-size: 12px;
-    }
-
-    .csv-preview-table th,
-    .csv-preview-table td {
-        padding: 6px 8px;
     }
 
     /* Mobile Auth */
@@ -1951,11 +1826,5 @@ body {
     .appointment-tooltip {
         max-width: 220px;
         padding: 10px 12px;
-    }
-
-    .admin-tab {
-        font-size: 11px;
-        padding: 6px 8px;
-        min-width: 100px;
     }
 }
