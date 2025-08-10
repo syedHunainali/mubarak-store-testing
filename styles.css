@@ -42,7 +42,7 @@ body {
 .btn:hover {
     background: #ffffff;
     color: #000000;
-    transform: translateY(-2px);
+    /* transform: translateY(-2px); */
 }
 
 .btn-primary {
@@ -57,7 +57,70 @@ body {
     transition: background 0.2s;
     width: 100%;
 }
-
+.btn-primary-login {
+    background: #7BC142;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+    width: 20%;
+}
+.btn-primary-login2 {
+    background: #7BC142;
+    color: white;
+    border: none;
+    padding: 10px;
+    bottom: 20px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+    width: 20%;
+}
+.btn-primary-login3 {
+    background: #7BC142;
+    color: white;
+    border: none;
+    padding: 10px;
+    bottom: -70px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+    width: 20%;
+}
+.btn-primary-yes {
+    background: #7BC142;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    right: 600px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+    width: 20%;
+}
+.btn-primary-no {
+    background: #7BC142;
+    color: rgb(2, 36, 12);
+    border: none;
+    padding: 12px;
+    left: 550px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+    width: 20%;
+}
 .btn-primary:hover {
     background: #6BA438;
 }
@@ -136,7 +199,7 @@ body {
     font-size: 24px;
     cursor: pointer;
     box-shadow: 0 4px 15px rgba(123, 193, 66, 0.4);
-    transition: all 0.3s ease;
+    /* transition: all 0.3s ease; */
     z-index: 1000;
     display: flex;
     align-items: center;
@@ -145,12 +208,12 @@ body {
 
 .floating-appointment-btn:hover {
     background: #6BA438;
-    transform: translateY(-3px);
+    transform: translateY(0px);
     box-shadow: 0 6px 20px rgba(123, 193, 66, 0.6);
 }
 
 .floating-appointment-btn:active {
-    transform: translateY(-1px);
+    transform: translateY(0px);
 }
 
 /* Appointment Tooltip */
@@ -284,6 +347,7 @@ body {
     cursor: pointer;
     align-items: center;
     justify-content: center;
+    font-size: 18px;
 }
 
 .mobile-search-overlay {
@@ -330,6 +394,7 @@ body {
     width: 40px;
     height: 40px;
     cursor: pointer;
+    font-size: 20px;
 }
 
 .mobile-search-results {
@@ -446,12 +511,13 @@ body {
 /* Mobile Menu */
 .mobile-menu-btn {
     display: none;
-    background: #000;
-    color: white;
+    background: none;
+    color: #333;
     border: none;
     padding: 10px;
     border-radius: 5px;
     cursor: pointer;
+    font-size: 24px;
 }
 
 .mobile-menu-overlay {
@@ -466,7 +532,7 @@ body {
 }
 
 .mobile-menu-sidebar {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 280px;
@@ -474,6 +540,8 @@ body {
     background: white;
     transform: translateX(-100%);
     transition: transform 0.3s ease;
+    display: flex;
+    flex-direction: column;
 }
 
 .mobile-menu-sidebar.open {
@@ -487,6 +555,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-shrink: 0;
 }
 
 .mobile-menu-close {
@@ -497,8 +566,16 @@ body {
     cursor: pointer;
 }
 
+.mobile-menu-content {
+    flex-grow: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
 .mobile-menu-items {
-    padding: 20px 0;
+    padding: 10px 0;
+    flex-grow: 1;
 }
 
 .mobile-menu-item {
@@ -516,6 +593,20 @@ body {
     color: #f39c12;
 }
 
+.mobile-menu-footer {
+    padding: 20px;
+    border-top: 1px solid #eee;
+    flex-shrink: 0;
+}
+
+.mobile-menu-auth a {
+    color: green;
+    text-decoration: none;
+    font-weight: bold;
+    display: block;
+    padding: 5px 0;
+}
+
 /* Mobile Appointment Nav Item */
 .appointment-nav-item {
     background: #7BC142 !important;
@@ -525,6 +616,7 @@ body {
     text-align: center !important;
     border-bottom: none !important;
     font-weight: bold !important;
+    padding: 15px 20px !important;
 }
 
 .appointment-nav-item:hover {
@@ -980,6 +1072,7 @@ body {
     border-radius: 8px;
     margin-bottom: 10px;
     background: #f9f9f9;
+    position: relative; /* Add relative positioning */
 }
 
 .admin-product-info {
@@ -1492,24 +1585,39 @@ body {
     }
 
     .header-tools {
-        padding: 10px 15px;
+        padding: 5px 15px;
         flex-wrap: nowrap;
         align-items: center;
+        height: 70px; /* Set a fixed height */
+    }
+
+    .logo {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
     }
 
     .logo img {
-        height: 65px;
+        height: 60px;
     }
 
     .search-wrapper {
         display: none;
     }
+    
+    .mobile-menu-btn {
+        display: block;
+    }
 
     .mobile-search-btn {
         display: flex;
     }
+    
+    .header-right-controls {
+        gap: 10px;
+    }
 
-    .cart-total-display {
+    #auth-controls-desktop, .cart-total-display {
         display: none;
     }
 
@@ -1518,28 +1626,9 @@ body {
         height: 40px;
     }
 
-    .auth-controls a {
-        font-size: 12px;
-    }
-
     /* Mobile Navigation */
     .nav-container {
         display: none;
-    }
-
-    .mobile-menu-btn {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: #f0f0f0;
-        border: 1px solid #ddd;
-        color: #333;
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        font-size: 20px;
-        padding: 0;
-        cursor: pointer;
     }
 
     .top-banner {
@@ -1550,7 +1639,7 @@ body {
 
     /* Mobile Content */
     body {
-        padding-top: 115px;
+        padding-top: 115px; /* Adjust based on header + top banner height */
     }
 
     .page-content {
@@ -1723,14 +1812,21 @@ body {
     }
 
     .admin-product-item {
-        flex-direction: column;
         align-items: flex-start;
-        gap: 10px;
+        padding-bottom: 20px; /* Add padding to avoid overlap */
+    }
+    
+    .admin-product-info {
+        padding-right: 90px; /* Make space for the absolute buttons */
     }
 
     .admin-product-actions {
-        width: 100%;
-        justify-content: flex-end;
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        flex-direction: column;
+        gap: 8px;
+        width: 75px;
     }
 
     /* Mobile Auth */

@@ -61,7 +61,8 @@ const elements = {
     productDetailContentEl: document.getElementById('product-detail-content'),
     searchInputEl: document.getElementById('search-input'),
     mobileSearchInputEl: document.getElementById('mobile-search-input'),
-    authControlsEl: document.getElementById('auth-controls'),
+    authControlsDesktopEl: document.getElementById('auth-controls-desktop'),
+    authControlsMobileEl: document.getElementById('auth-controls-mobile'),
     loginFormEl: document.getElementById('login-form'),
     signupFormEl: document.getElementById('signup-form'),
     ordersListEl: document.getElementById('orders-list'),
@@ -103,11 +104,13 @@ function handleScroll() {
 // Mobile search functions
 window.openMobileSearch = function () {
     elements.mobileSearchOverlay.style.display = 'block';
+    document.body.style.overflow = 'hidden'; // Prevent background scrolling
     elements.mobileSearchInputEl.focus();
 }
 
 window.closeMobileSearch = function () {
     elements.mobileSearchOverlay.style.display = 'none';
+    document.body.style.overflow = ''; // Restore scrolling
     elements.mobileSearchInputEl.value = '';
     document.getElementById('mobile-search-results-grid').innerHTML = '';
 }
@@ -115,6 +118,7 @@ window.closeMobileSearch = function () {
 // Mobile menu functions
 window.openMobileMenu = function () {
     elements.mobileMenuOverlay.style.display = 'block';
+    document.body.style.overflow = 'hidden'; // Prevent background scrolling
     setTimeout(() => {
         elements.mobileMenuSidebar.classList.add('open');
     }, 10);
@@ -122,6 +126,7 @@ window.openMobileMenu = function () {
 
 window.closeMobileMenu = function () {
     elements.mobileMenuSidebar.classList.remove('open');
+    document.body.style.overflow = ''; // Restore scrolling
     setTimeout(() => {
         elements.mobileMenuOverlay.style.display = 'none';
     }, 300);
@@ -601,17 +606,27 @@ window.toggleAuthForms = function () {
 }
 
 function updateAuthControls() {
+    let welcomeMessage = '';
+    const defaultLogin = `<a href="#" onclick="showPage('login')">Login</a>`;
+
     if (currentUser) {
-        let welcomeMessage = `Welcome, ${currentUser.name}`;
+        welcomeMessage = `<span>Welcome, ${currentUser.name}</span>`;
         if (currentUser.role === 'admin') {
-            welcomeMessage += ` | <a href="#" onclick="showPage('admin')">Admin Panel</a>`;
+            welcomeMessage += ` <a href="#" onclick="showPage('admin')">Admin Panel</a>`;
         }
-        welcomeMessage += ` | <a href="#" onclick="logout()">Logout</a>`;
-        elements.authControlsEl.innerHTML = welcomeMessage;
+        welcomeMessage += ` <a href="#" onclick="logout()">Logout</a>`;
     } else {
-        elements.authControlsEl.innerHTML = `<a href="#" onclick="showPage('login')">Login</a>`;
+        welcomeMessage = defaultLogin;
+    }
+
+    if (elements.authControlsDesktopEl) {
+        elements.authControlsDesktopEl.innerHTML = welcomeMessage;
+    }
+    if (elements.authControlsMobileEl) {
+        elements.authControlsMobileEl.innerHTML = welcomeMessage;
     }
 }
+
 
 window.logout = function () {
     currentUser = null;
