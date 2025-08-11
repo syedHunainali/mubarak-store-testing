@@ -135,13 +135,16 @@
     </div>
     
     <header class="header" id="main-header">
-        <!-- Special August 14 Banner with image background -->
-        <div class="august-14-banner">
-            <img src="images/14-aug-banner.svg"  class="august-14-banner-image" alt="14th August Banner">
-            <div class="august-14-banner-text">
-                 <!-- Text can be added here if needed -->
-            </div>
+        <!-- Special August 14 Banners -->
+        <!-- Desktop Banner -->
+        <div class="august-14-banner desktop-only">
+            <img src="images/14-aug-banner.svg" class="august-14-banner-image" alt="14th August Banner">
         </div>
+        <!-- Mobile Banner (ensure you have '14-aug-banner-mobile.svg' in your images folder) -->
+        <div class="august-14-banner mobile-only">
+            <img src="images/14-aug-banner-mobile.svg" class="august-14-banner-image" alt="14th August Mobile Banner" onerror="this.style.display='none'">
+        </div>
+
         <div class="header-tools">
             <button class="mobile-menu-btn" onclick="openMobileMenu()">☰</button>
             <div class="logo">

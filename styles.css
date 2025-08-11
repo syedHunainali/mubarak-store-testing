@@ -220,6 +220,24 @@ body {
 }
 
 /* Header & Navigation */
+.august-14-banner {
+    line-height: 0;
+}
+
+.august-14-banner-image {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.mobile-only {
+    display: none;
+}
+
+.desktop-only {
+    display: block;
+}
+
 .top-banner {
     background: #d4cdcd;
     color: rgb(19, 0, 0);
@@ -1591,6 +1609,13 @@ body {
 
 /* Mobile Responsive */
 @media (max-width: 768px) {
+    .desktop-only {
+        display: none;
+    }
+
+    .mobile-only {
+        display: block;
+    }
 
     /* Mobile Header */
     .header {
