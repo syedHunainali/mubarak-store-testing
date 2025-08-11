@@ -20,6 +20,11 @@ const db = getFirestore(app);
 
 // --- CONSTANTS ---
 const DISCOUNT_RATE = 0.14; // 14% discount
+const HERB_PRICE_PER_GRAM = 15; // Example price per gram for all herbs
+const AVAILABLE_HERBS = [
+    "Ashwagandha", "Brahmi", "Tulsi", "Turmeric", "Ginger", "Amla", "Moringa", "Neem", "Shatavari", "Triphala", "Licorice", "Cardamom", "Cinnamon", "Clove", "Fennel"
+];
+
 
 // --- PERFORMANCE OPTIMIZATIONS ---
 // Debounce function to limit the rate at which a function gets called.
@@ -43,6 +48,7 @@ function createDocumentFragment() {
 // --- STATE MANAGEMENT ---
 let allProducts = [];
 let cart = [];
+let customFormula = [];
 let lastViewedCategory = 'home';
 let currentUser = null;
 let desktopSlideIndex = 1;
@@ -82,7 +88,15 @@ const elements = {
     mainHeader: document.getElementById('main-header'),
     mobileSearchOverlay: document.getElementById('mobile-search-overlay'),
     mobileMenuOverlay: document.getElementById('mobile-menu-overlay'),
-    mobileMenuSidebar: document.getElementById('mobile-menu-sidebar')
+    mobileMenuSidebar: document.getElementById('mobile-menu-sidebar'),
+    herbNameInput: document.getElementById('herb-name'),
+    herbQuantityInput: document.getElementById('herb-quantity'),
+    addHerbBtn: document.getElementById('add-herb-btn'),
+    herbSuggestionsEl: document.getElementById('herb-suggestions'),
+    formulaItemsListEl: document.getElementById('formula-items-list'),
+    formulaTotalEl: document.getElementById('formula-total'),
+    totalWeightEl: document.getElementById('total-weight'),
+    addFormulaToCartBtn: document.getElementById('add-formula-to-cart-btn')
 };
 
 // --- MOBILE FUNCTIONALITY ---
@@ -232,7 +246,6 @@ function renderAllGrids() {
         { products: allProducts.filter(p => p.category === 'honey'), id: 'honey-grid' },
         { products: allProducts.filter(p => p.category === 'seeds'), id: 'seeds-grid' },
         { products: allProducts.filter(p => p.category === 'supplements'), id: 'supplements-grid' },
-        { products: allProducts.filter(p => p.category === 'capsules'), id: 'capsules-grid' },
         { products: allProducts.filter(p => p.category === 'cold-pressed-oil'), id: 'cold-pressed-oil-grid' },
         { products: allProducts.filter(p => p.category === 'essential-oils'), id: 'essential-oils-grid' },
         { products: allProducts.filter(p => p.category === 'deals'), id: 'deals-grid' }
@@ -565,6 +578,102 @@ window.showPaymentContent = function (method) {
     document.querySelector(`.payment-tab[onclick="showPaymentContent('${method}')"]`).classList.add('active');
 }
 
+// --- CUSTOM FORMULA LOGIC ---
+function renderFormulaItems() {
+    if (customFormula.length === 0) {
+        elements.formulaItemsListEl.innerHTML = '<p>Your formula is empty.</p>';
+        elements.formulaTotalEl.classList.add('hidden');
+        return;
+    }
+
+    elements.formulaItemsListEl.innerHTML = '';
+    let totalWeight = 0;
+    customFormula.forEach((item, index) => {
+        const formulaItemEl = document.createElement('div');
+        formulaItemEl.className = 'formula-item';
+        formulaItemEl.innerHTML = `
+            <span>${item.name} - ${item.quantity}g</span>
+            <button class="remove-herb-btn" data-index="${index}">×</button>
+        `;
+        elements.formulaItemsListEl.appendChild(formulaItemEl);
+        totalWeight += item.quantity;
+    });
+
+    elements.totalWeightEl.textContent = totalWeight;
+    elements.formulaTotalEl.classList.remove('hidden');
+}
+
+function addHerbToFormula() {
+    const name = elements.herbNameInput.value.trim();
+    const quantity = parseInt(elements.herbQuantityInput.value);
+
+    if (name && quantity > 0 && AVAILABLE_HERBS.includes(name)) {
+        const existingHerb = customFormula.find(item => item.name === name);
+        if (existingHerb) {
+            existingHerb.quantity += quantity;
+        } else {
+            customFormula.push({ name, quantity });
+        }
+        renderFormulaItems();
+        elements.herbNameInput.value = '';
+        elements.herbQuantityInput.value = '10';
+    } else {
+        showAlert('Please select a valid herb from the list and enter a quantity.');
+    }
+}
+
+function removeHerbFromFormula(index) {
+    customFormula.splice(index, 1);
+    renderFormulaItems();
+}
+
+function addFormulaToCart() {
+    if (customFormula.length === 0) {
+        showAlert('Your formula is empty.');
+        return;
+    }
+
+    const totalWeight = customFormula.reduce((sum, item) => sum + item.quantity, 0);
+    const totalPrice = totalWeight * HERB_PRICE_PER_GRAM;
+    
+    const formulaProduct = {
+        id: `custom-formula-${Date.now()}`,
+        name: 'Custom Herbal Formula',
+        description: customFormula.map(item => `${item.name} (${item.quantity}g)`).join(', '),
+        salePrice: totalPrice,
+        originalPrice: totalPrice,
+        quantity: 1,
+        image: 'images/collection-5.png' // Generic image for custom formulas
+    };
+
+    cart.push(formulaProduct);
+    updateCartDisplay();
+    showAlert('Custom formula added to cart!');
+    customFormula = [];
+    renderFormulaItems();
+}
+
+function showHerbSuggestions() {
+    const input = elements.herbNameInput.value.toLowerCase();
+    elements.herbSuggestionsEl.innerHTML = '';
+    if (input.length === 0) {
+        return;
+    }
+
+    const suggestions = AVAILABLE_HERBS.filter(herb => herb.toLowerCase().startsWith(input));
+    
+    suggestions.forEach(suggestion => {
+        const suggestionEl = document.createElement('div');
+        suggestionEl.className = 'suggestion-item';
+        suggestionEl.textContent = suggestion;
+        suggestionEl.onclick = () => {
+            elements.herbNameInput.value = suggestion;
+            elements.herbSuggestionsEl.innerHTML = '';
+        };
+        elements.herbSuggestionsEl.appendChild(suggestionEl);
+    });
+}
+
 // --- PRODUCT MANAGEMENT (ADMIN) ---
 
 // Opens the modal to edit a product's details
@@ -782,6 +891,10 @@ document.addEventListener('click', async function (e) {
         const product = allProducts.find(p => p.id === e.target.dataset.productId);
         if (product) openEditModal(product);
     }
+
+    if (e.target.classList.contains('remove-herb-btn')) {
+        removeHerbFromFormula(parseInt(e.target.dataset.index));
+    }
     
     if (e.target.classList.contains('btn-fulfillment') && !e.target.disabled) {
         if (e.target.dataset.orderId) {
@@ -827,6 +940,10 @@ elements.editModalCloseBtn.addEventListener('click', () => elements.editProductM
 
 elements.searchInputEl.addEventListener('input', handleSearch);
 elements.mobileSearchInputEl.addEventListener('input', handleMobileSearch);
+elements.herbNameInput.addEventListener('input', showHerbSuggestions);
+elements.addHerbBtn.addEventListener('click', addHerbToFormula);
+elements.addFormulaToCartBtn.addEventListener('click', addFormulaToCart);
+
 
 let ticking = false;
 window.addEventListener('scroll', () => {
