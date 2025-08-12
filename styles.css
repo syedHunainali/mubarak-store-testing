@@ -245,7 +245,7 @@ body {
 }
 
 .marquee-text {
-    /* font-size: ; */
+    font-size: 20px ;
     /* font-weight:  */
     font-style: oblique;
     color: rgb(201, 206, 202);
@@ -253,6 +253,16 @@ body {
     white-space: nowrap;
     animation: marquee 10s linear infinite;
     display: inline-block;
+}
+.marquee-container-mobile {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
 }
 .marquee-text-mobile {
     font-size: 5px ;
@@ -263,6 +273,9 @@ body {
     white-space: nowrap;
     animation: marquee 10s linear infinite;
     display: inline-block;
+}
+.marquee-text-mobile span {
+    padding: 0 2em;
 }
 .marquee-text span {
     padding: 0 2em;
