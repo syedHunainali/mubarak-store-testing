@@ -228,7 +228,7 @@ body {
 
 .august-14-banner-image {
     width: 100%;
-    height: auto;
+    height: 50px;
     display: block;
 }
 
@@ -1016,6 +1016,13 @@ body {
     padding: 20px;
     border: 1px solid #ccc;
     border-top: none;
+}
+
+.admin-section {
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
 }
 
 .order-record,

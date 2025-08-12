@@ -137,8 +137,8 @@
     <header class="header" id="main-header">
         <!-- Special August 14 Banner -->
         <div class="august-14-banner">
-            <img src="images/14-aug-banner.png" class="august-14-banner-image desktop-only" alt="14th August Banner">
-            <img src="images/14-aug-banner-mobile.png" class="august-14-banner-image mobile-only" alt="14th August Mobile Banner" onerror="this.style.display='none'">
+            <img src="images/14-aug-banner.png" class="august-14-banner-image desktop-only" alt="14th August Banner" >
+            <img src="images/14-aug-banner-mobile.png" class="august-14-banner-image mobile-only" alt="14th August Mobile Banner" onerror="this.style.display='none'" height="30px">
             <div class="marquee-container">
                 <div class="marquee-text">
                     <span>Free Shipping For Orders Above Rs.2000</span>
@@ -677,46 +677,63 @@
                         <div id="appointments-list"></div>
                     </div>
                     <div class="admin-content hidden" id="admin-products-content">
-                        <h3 style="margin-bottom: 20px;">Add a New Product</h3>
-                        <form id="add-product-form">
-                            <div class="admin-product-form">
+                        <!-- Add Single Product Form -->
+                        <div class="admin-section">
+                            <h3 style="margin-bottom: 20px;">Add a New Product</h3>
+                            <form id="add-product-form">
+                                <div class="admin-product-form">
+                                    <div class="form-group">
+                                        <label for="product-name">Product Name</label>
+                                        <input id="product-name" required="" type="text" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="product-price">Price (PKR)</label>
+                                        <input id="product-price" required="" type="number" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="product-weight">Weight (grams)</label>
+                                        <input id="product-weight" type="number" min="1" required />
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="product-category">Category</label>
+                                        <select id="product-category" required>
+                                            <option value="dry-fruits">Dry Fruits</option>
+                                            <option value="herbal-tea">Herbal Tea</option>
+                                            <option value="honey">Honey</option>
+                                            <option value="seeds">Seeds</option>
+                                            <option value="supplements">Supplements</option>
+                                            <option value="custom-formula">Custom Formula</option>
+                                            <option value="cold-pressed-oil">Cold Pressed Oil</option>
+                                            <option value="essential-oils">Essential Oils</option>
+                                            <option value="deals">Deals</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="product-image-filename">Product Image Filename</label>
+                                        <input id="product-image-filename" placeholder="e.g., my-image.jpg" required="" type="text" />
+                                    </div>
+                                    <div class="form-group" style="grid-column: 1 / -1;">
+                                        <label for="product-description">Description</label>
+                                        <textarea id="product-description" required="" rows="4"></textarea>
+                                    </div>
+                                </div>
+                                <button class="btn btn-primary" style="margin-top: 20px; width: auto;" type="submit">Add Product</button>
+                            </form>
+                        </div>
+
+                        <!-- Bulk Add via CSV -->
+                        <div class="admin-section">
+                            <h3 style="margin-bottom: 20px;">Bulk Add Products via CSV</h3>
+                            <form id="bulk-add-form">
                                 <div class="form-group">
-                                    <label for="product-name">Product Name</label>
-                                    <input id="product-name" required="" type="text" />
+                                    <label for="csv-file-input">Upload CSV File</label>
+                                    <input type="file" id="csv-file-input" accept=".csv" required>
+                                    <small>CSV format: name,price,weight,category,description,image_filename</small>
                                 </div>
-                                <div class="form-group">
-                                    <label for="product-price">Price (PKR)</label>
-                                    <input id="product-price" required="" type="number" />
-                                </div>
-                                <div class="form-group">
-                                    <label for="product-weight">Weight (grams)</label>
-                                    <input id="product-weight" type="number" min="1" required />
-                                </div>
-                                <div class="form-group">
-                                    <label for="product-category">Category</label>
-                                    <select id="product-category" required>
-                                        <option value="dry-fruits">Dry Fruits</option>
-                                        <option value="herbal-tea">Herbal Tea</option>
-                                        <option value="honey">Honey</option>
-                                        <option value="seeds">Seeds</option>
-                                        <option value="supplements">Supplements</option>
-                                        <option value="custom-formula">Custom Formula</option>
-                                        <option value="cold-pressed-oil">Cold Pressed Oil</option>
-                                        <option value="essential-oils">Essential Oils</option>
-                                        <option value="deals">Deals</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="product-image-filename">Product Image Filename</label>
-                                    <input id="product-image-filename" placeholder="e.g., my-image.jpg" required="" type="text" />
-                                </div>
-                                <div class="form-group" style="grid-column: 1 / -1;">
-                                    <label for="product-description">Description</label>
-                                    <textarea id="product-description" required="" rows="4"></textarea>
-                                </div>
-                            </div>
-                            <button class="btn btn-primary" style="margin-top: 20px; width: auto;" type="submit">Add Product</button>
-                        </form>
+                                <button class="btn btn-primary" style="width: auto;" type="submit">Upload and Add Products</button>
+                            </form>
+                            <div id="bulk-upload-status" style="margin-top: 15px; font-weight: bold;"></div>
+                        </div>
                     </div>
                     <div class="admin-content hidden" id="admin-manage-content">
                         <h3 style="margin-bottom: 20px;">Manage Products</h3>

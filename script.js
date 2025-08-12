@@ -1,6 +1,6 @@
 // Import Firebase functions from the latest SDK
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-import { getFirestore, collection, addDoc, onSnapshot, query, doc, setDoc, getDocs, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+import { getFirestore, collection, addDoc, onSnapshot, query, doc, setDoc, getDocs, updateDoc, deleteDoc, writeBatch } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
 // --- FIREBASE SETUP ---
 // Your provided Firebase config
@@ -92,7 +92,11 @@ const elements = {
     formulaTotalEl: document.getElementById('formula-total'),
     totalWeightEl: document.getElementById('total-weight'),
     totalPriceEl: document.getElementById('total-price'),
-    addFormulaToCartBtn: document.getElementById('add-formula-to-cart-btn')
+    addFormulaToCartBtn: document.getElementById('add-formula-to-cart-btn'),
+    // Elements for bulk upload
+    bulkAddFormEl: document.getElementById('bulk-add-form'),
+    csvFileInputEl: document.getElementById('csv-file-input'),
+    bulkUploadStatusEl: document.getElementById('bulk-upload-status'),
 };
 
 // --- MOBILE FUNCTIONALITY ---
@@ -709,6 +713,49 @@ window.deleteProduct = function (productId) {
     });
 }
 
+/**
+ * Parses a CSV string into an array of product objects.
+ * Assumes the first row is the header.
+ * @param {string} csvText The raw CSV text content.
+ * @returns {Array<Object>} An array of product objects.
+ */
+function parseCSV(csvText) {
+    const products = [];
+    const lines = csvText.trim().split(/\r?\n/);
+    if (lines.length < 2) {
+        showAlert("CSV file is empty or has no data rows.");
+        return [];
+    }
+
+    const headers = lines[0].split(',').map(h => h.trim());
+    const requiredHeaders = ['name', 'price', 'weight', 'category', 'description', 'image_filename'];
+    
+    // Validate headers
+    for (const requiredHeader of requiredHeaders) {
+        if (!headers.includes(requiredHeader)) {
+            showAlert(`CSV is missing required header: ${requiredHeader}`);
+            return [];
+        }
+    }
+
+    for (let i = 1; i < lines.length; i++) {
+        const values = lines[i].split(',');
+        if (values.length !== headers.length) {
+            console.warn(`Skipping row ${i + 1}: Mismatched number of columns.`);
+            continue;
+        }
+
+        const product = {};
+        for (let j = 0; j < headers.length; j++) {
+            product[headers[j]] = values[j].trim();
+        }
+        
+        products.push(product);
+    }
+    return products;
+}
+
+
 // --- AUTHENTICATION & ADMIN (LOCAL STORAGE) ---
 window.toggleAuthForms = function () {
     elements.loginFormEl.classList.toggle('hidden');
@@ -1121,6 +1168,72 @@ elements.editProductFormEl.addEventListener('submit', async function(e) {
         console.error("Error updating product: ", error);
         showAlert("Failed to update product.");
     }
+});
+
+// Handle bulk product upload via CSV
+elements.bulkAddFormEl.addEventListener('submit', function (e) {
+    e.preventDefault();
+    const file = elements.csvFileInputEl.files[0];
+    if (!file) {
+        showAlert('Please select a CSV file to upload.');
+        return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = async function(event) {
+        const csvText = event.target.result;
+        const parsedProducts = parseCSV(csvText);
+
+        if (parsedProducts.length === 0) {
+            elements.bulkUploadStatusEl.textContent = "No valid products found in the file.";
+            elements.bulkUploadStatusEl.style.color = 'red';
+            return;
+        }
+
+        elements.bulkUploadStatusEl.textContent = `Processing ${parsedProducts.length} products...`;
+        elements.bulkUploadStatusEl.style.color = 'blue';
+
+        try {
+            // Use a batch write for efficiency
+            const batch = writeBatch(db);
+            let productsAdded = 0;
+
+            parsedProducts.forEach(p => {
+                const newProductRef = doc(collection(db, "products"));
+                const productData = {
+                    name: p.name,
+                    price: parseFloat(p.price) || 0,
+                    weight: parseInt(p.weight) || 0,
+                    category: p.category,
+                    description: p.description,
+                    image: `images/${p.image_filename}`,
+                };
+
+                // Basic validation
+                if (productData.name && productData.price > 0 && productData.category) {
+                    batch.set(newProductRef, productData);
+                    productsAdded++;
+                } else {
+                    console.warn("Skipping invalid product data:", p);
+                }
+            });
+
+            await batch.commit();
+            
+            elements.bulkUploadStatusEl.textContent = `${productsAdded} products added successfully!`;
+            elements.bulkUploadStatusEl.style.color = 'green';
+            elements.bulkAddFormEl.reset();
+            await initializeStore(true); // Refresh store data
+
+        } catch (error) {
+            console.error("Error adding products in bulk: ", error);
+            elements.bulkUploadStatusEl.textContent = "An error occurred during the upload.";
+            elements.bulkUploadStatusEl.style.color = 'red';
+            showAlert("Failed to add products from CSV. Check console for details.");
+        }
+    };
+
+    reader.readAsText(file);
 });
 
 
