@@ -245,7 +245,7 @@ body {
 }
 
 .marquee-text {
-    font-size: 20px;
+    /* font-size: ; */
     /* font-weight:  */
     font-style: oblique;
     color: rgb(201, 206, 202);
