@@ -254,7 +254,16 @@ body {
     animation: marquee 10s linear infinite;
     display: inline-block;
 }
-
+.marquee-text-mobile {
+    font-size: 5px ;
+    /* font-weight:  */
+    font-style: oblique;
+    color: rgb(201, 206, 202);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+    white-space: nowrap;
+    animation: marquee 10s linear infinite;
+    display: inline-block;
+}
 .marquee-text span {
     padding: 0 2em;
 }
