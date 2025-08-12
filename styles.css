@@ -227,9 +227,8 @@ body {
 }
 
 .august-14-banner-image {
-    width: 1400px;
-    left: auto;
-    height: 40px;
+    width: 100%;
+    height: auto;
     display: block;
 }
 
@@ -245,38 +244,16 @@ body {
 }
 
 .marquee-text {
-    font-size: 20px ;
-    /* font-weight:  */
-    font-style: oblique;
-    color: rgb(201, 206, 202);
+    font-size: 2.5vw;
+    font-weight: bold;
+    color: white;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
     white-space: nowrap;
-    animation: marquee 10s linear infinite;
+    animation: marquee 25s linear infinite;
     display: inline-block;
+    padding-left: 100%;
 }
-.marquee-container-mobile {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    overflow: hidden;
-}
-.marquee-text-mobile {
-    font-size: 5px ;
-    /* font-weight:  */
-    font-style: oblique;
-    color: rgb(201, 206, 202);
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
-    white-space: nowrap;
-    animation: marquee 10s linear infinite;
-    display: inline-block;
-}
-.marquee-text-mobile span {
-    padding: 0 2em;
-}
+
 .marquee-text span {
     padding: 0 2em;
 }
@@ -286,7 +263,7 @@ body {
         transform: translateX(0);
     }
     100% {
-        transform: translateX(-50%);
+        transform: translateX(-100%);
     }
 }
 
@@ -1221,7 +1198,7 @@ body {
     position: absolute;
     top: 10px;
     left: 10px;
-    background: #e74c3c;
+    background: #02720c;
     color: white;
     padding: 5px 8px;
     border-radius: 5px;
@@ -1985,7 +1962,7 @@ body {
     }
     
     .marquee-text {
-        font-size: 100px;
+        font-size: 4vw;
         animation-duration: 15s;
     }
 
