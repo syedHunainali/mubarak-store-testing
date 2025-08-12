@@ -20,11 +20,6 @@ const db = getFirestore(app);
 
 // --- CONSTANTS ---
 const DISCOUNT_RATE = 0.14; // 14% discount
-const HERB_PRICE_PER_GRAM = 15; // Example price per gram for all herbs
-const AVAILABLE_HERBS = [
-    "Ashwagandha", "Brahmi", "Tulsi", "Turmeric", "Ginger", "Amla", "Moringa", "Neem", "Shatavari", "Triphala", "Licorice", "Cardamom", "Cinnamon", "Clove", "Fennel"
-];
-
 
 // --- PERFORMANCE OPTIMIZATIONS ---
 // Debounce function to limit the rate at which a function gets called.
@@ -96,6 +91,7 @@ const elements = {
     formulaItemsListEl: document.getElementById('formula-items-list'),
     formulaTotalEl: document.getElementById('formula-total'),
     totalWeightEl: document.getElementById('total-weight'),
+    totalPriceEl: document.getElementById('total-price'),
     addFormulaToCartBtn: document.getElementById('add-formula-to-cart-btn')
 };
 
@@ -588,6 +584,8 @@ function renderFormulaItems() {
 
     elements.formulaItemsListEl.innerHTML = '';
     let totalWeight = 0;
+    let totalPrice = 0;
+
     customFormula.forEach((item, index) => {
         const formulaItemEl = document.createElement('div');
         formulaItemEl.className = 'formula-item';
@@ -597,28 +595,36 @@ function renderFormulaItems() {
         `;
         elements.formulaItemsListEl.appendChild(formulaItemEl);
         totalWeight += item.quantity;
+        totalPrice += item.pricePerGram * item.quantity;
     });
 
     elements.totalWeightEl.textContent = totalWeight;
+    elements.totalPriceEl.textContent = totalPrice.toFixed(2);
     elements.formulaTotalEl.classList.remove('hidden');
 }
 
 function addHerbToFormula() {
     const name = elements.herbNameInput.value.trim();
     const quantity = parseInt(elements.herbQuantityInput.value);
+    const herbProduct = allProducts.find(p => p.name === name && p.pricePerGram > 0);
 
-    if (name && quantity > 0 && AVAILABLE_HERBS.includes(name)) {
+    if (herbProduct && quantity > 0) {
         const existingHerb = customFormula.find(item => item.name === name);
         if (existingHerb) {
             existingHerb.quantity += quantity;
         } else {
-            customFormula.push({ name, quantity });
+            customFormula.push({ 
+                name: herbProduct.name, 
+                quantity: quantity, 
+                pricePerGram: herbProduct.pricePerGram 
+            });
         }
         renderFormulaItems();
         elements.herbNameInput.value = '';
         elements.herbQuantityInput.value = '10';
+        elements.herbSuggestionsEl.innerHTML = '';
     } else {
-        showAlert('Please select a valid herb from the list and enter a quantity.');
+        showAlert('Please select a valid herb from the suggestions and enter a quantity.');
     }
 }
 
@@ -633,8 +639,7 @@ function addFormulaToCart() {
         return;
     }
 
-    const totalWeight = customFormula.reduce((sum, item) => sum + item.quantity, 0);
-    const totalPrice = totalWeight * HERB_PRICE_PER_GRAM;
+    const totalPrice = customFormula.reduce((sum, item) => sum + (item.pricePerGram * item.quantity), 0);
     
     const formulaProduct = {
         id: `custom-formula-${Date.now()}`,
@@ -660,14 +665,14 @@ function showHerbSuggestions() {
         return;
     }
 
-    const suggestions = AVAILABLE_HERBS.filter(herb => herb.toLowerCase().startsWith(input));
+    const suggestions = allProducts.filter(p => p.pricePerGram > 0 && p.name.toLowerCase().startsWith(input));
     
     suggestions.forEach(suggestion => {
         const suggestionEl = document.createElement('div');
         suggestionEl.className = 'suggestion-item';
-        suggestionEl.textContent = suggestion;
+        suggestionEl.textContent = suggestion.name;
         suggestionEl.onclick = () => {
-            elements.herbNameInput.value = suggestion;
+            elements.herbNameInput.value = suggestion.name;
             elements.herbSuggestionsEl.innerHTML = '';
         };
         elements.herbSuggestionsEl.appendChild(suggestionEl);
@@ -680,11 +685,10 @@ function showHerbSuggestions() {
 function openEditModal(product) {
     document.getElementById('edit-product-id').value = product.id;
     document.getElementById('edit-product-name').value = product.name;
-    // Admin edits the original price, not the sale price
     document.getElementById('edit-product-price').value = product.originalPrice; 
+    document.getElementById('edit-product-weight').value = product.weight || '';
     document.getElementById('edit-product-category').value = product.category;
     document.getElementById('edit-product-description').value = product.description;
-    // The image path is like "images/my-image.jpg", we only need the filename
     const filename = product.image.split('/').pop();
     document.getElementById('edit-product-image-filename').value = filename;
     
@@ -696,7 +700,6 @@ window.deleteProduct = function (productId) {
     showConfirm('Are you sure you want to delete this product?', async () => {
         try {
             await deleteDoc(doc(db, "products", productId));
-            // Refetch all products to ensure data consistency
             await initializeStore(true); 
             showAlert("Product deleted successfully!");
         } catch (error) {
@@ -1079,20 +1082,18 @@ elements.addProductFormEl.addEventListener('submit', async function (e) {
     const newProduct = {
         name: document.getElementById('product-name').value,
         price: parseFloat(document.getElementById('product-price').value),
+        weight: parseFloat(document.getElementById('product-weight').value),
         category: document.getElementById('product-category').value,
         description: document.getElementById('product-description').value,
         image: `images/${document.getElementById('product-image-filename').value}`,
     };
 
     try {
-        // Let firestore generate the ID by using addDoc
-        const docRef = await addDoc(collection(db, "products"), newProduct);
+        await addDoc(collection(db, "products"), newProduct);
         showAlert("Product added successfully!");
         elements.addProductFormEl.reset();
-        // Refetch products to get the new one
         await initializeStore(true);
-    } catch (error)
-        {
+    } catch (error) {
         console.error("Error adding product: ", error);
         showAlert(`Failed to add product. Error: ${error.message}`);
     }
@@ -1105,6 +1106,7 @@ elements.editProductFormEl.addEventListener('submit', async function(e) {
     const updatedData = {
         name: document.getElementById('edit-product-name').value,
         price: parseFloat(document.getElementById('edit-product-price').value),
+        weight: parseFloat(document.getElementById('edit-product-weight').value),
         category: document.getElementById('edit-product-category').value,
         description: document.getElementById('edit-product-description').value,
         image: `images/${document.getElementById('edit-product-image-filename').value}`,
@@ -1114,7 +1116,6 @@ elements.editProductFormEl.addEventListener('submit', async function(e) {
         await updateDoc(doc(db, "products", productId), updatedData);
         showAlert("Product updated successfully!");
         elements.editProductModalEl.classList.add('hidden');
-        // Refetch all products to ensure UI is up-to-date
         await initializeStore(true); 
     } catch (error) {
         console.error("Error updating product: ", error);
@@ -1140,19 +1141,20 @@ async function initializeStore(forceRefetch = false) {
         const productSnapshot = await getDocs(collection(db, "products"));
         allProducts = productSnapshot.docs.map(doc => {
             const data = doc.data();
-            // Apply 14% discount
             const originalPrice = data.price;
             const salePrice = originalPrice * (1 - DISCOUNT_RATE);
+            const pricePerGram = (data.weight > 0) ? (originalPrice / data.weight) : 0;
             return { 
                 id: doc.id, 
                 ...data,
                 originalPrice: originalPrice,
-                salePrice: salePrice
+                salePrice: salePrice,
+                pricePerGram: pricePerGram
             };
         });
         
         renderAllGrids();
-        renderAdminProductsList(); // Also update admin list
+        renderAdminProductsList();
     } catch (error) {
         console.error("Error fetching products from Firestore: ", error);
         showAlert("Could not load products. Please check your connection.");

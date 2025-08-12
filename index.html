@@ -136,13 +136,17 @@
     
     <header class="header" id="main-header">
         <!-- Special August 14 Banners -->
-        <!-- Desktop Banner -->
-        <div class="august-14-banner desktop-only">
-            <img src="images/14-aug-banner.svg" class="august-14-banner-image" alt="14th August Banner">
-        </div>
-        <!-- Mobile Banner (ensure you have '14-aug-banner-mobile.svg' in your images folder) -->
-        <div class="august-14-banner mobile-only">
-            <img src="images/14-aug-banner-mobile.svg" class="august-14-banner-image" alt="14th August Mobile Banner" onerror="this.style.display='none'">
+        <div class="august-14-banner">
+            <img src="images/14-aug-banner.png" class="august-14-banner-image desktop-only" alt="14th August Banner">
+            <img src="images/14-aug-banner-mobile.png" class="august-14-banner-image mobile-only" alt="14th August Mobile Banner" onerror="this.style.display='none'">
+            <div class="marquee-container">
+                <div class="marquee-text">
+                    <span>Free Shipping For Orders Above Rs.2000</span>
+                    <span>Flat  14% Off on azadi sale "Pakistan Zindabad"</span>
+                    <span>Free Shipping For Orders Above Rs.2000</span>
+                    <span>Flat  14% Off on azadi sale "Pakistan Zindabad"</span>
+                </div>
+            </div>
         </div>
 
         <div class="header-tools">
@@ -186,9 +190,9 @@
                 </ul>
             </nav>
         </div>
-        <div class="top-banner">
-            *Free Shipping For Order Above Rs.2000 **Pakistan's Best Herbal Online Store
-        </div>
+        <!-- <div class="top-banner">
+            **Pakistan's Best Herbal Online Store**
+        </div> -->
     </header>
     
     <main>
@@ -451,6 +455,7 @@
                             </div>
                             <div id="formula-total" class="hidden">
                                 <p>Total Weight: <span id="total-weight">0</span>g</p>
+                                <p>Total Price: Rs. <span id="total-price">0.00</span></p>
                                 <button class="btn-primary" id="add-formula-to-cart-btn">Add to Cart</button>
                             </div>
                         </div>
@@ -687,8 +692,12 @@
                                     <input id="product-price" required="" type="number" />
                                 </div>
                                 <div class="form-group">
+                                    <label for="product-weight">Weight (grams)</label>
+                                    <input id="product-weight" type="number" min="1" required />
+                                </div>
+                                <div class="form-group">
                                     <label for="product-category">Category</label>
-                                    <select id="product-category" required="" style="width:100%; padding:12px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px;">
+                                    <select id="product-category" required>
                                         <option value="dry-fruits">Dry Fruits</option>
                                         <option value="herbal-tea">Herbal Tea</option>
                                         <option value="honey">Honey</option>
@@ -734,6 +743,10 @@
                 <div class="form-group">
                     <label for="edit-product-price">Original Price (PKR)</label>
                     <input id="edit-product-price" type="number" required>
+                </div>
+                <div class="form-group">
+                    <label for="edit-product-weight">Weight (grams)</label>
+                    <input id="edit-product-weight" type="number" min="1" required>
                 </div>
                 <div class="form-group">
                     <label for="edit-product-category">Category</label>
